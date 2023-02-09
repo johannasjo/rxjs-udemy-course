@@ -28,3 +28,22 @@ const nameReq$ = ajax<any>('https://random-data-api.com/api/name/random_name');
 nameReq$.subscribe((randomName) => {
   console.log(randomName.response?.first_name);
 });
+
+// example of hot observable
+const button = document.querySelector('#clickBtn');
+const userClick$ = new Observable<any>((clickEvent) => {
+  button.addEventListener('click', (event) => {
+    clickEvent.next(event);
+  });
+});
+
+userClick$.subscribe((event) =>
+  console.log('first sub', event.type, event.x, event.y)
+);
+
+setTimeout(() => {
+  console.log('second sub start');
+  userClick$.subscribe((event) =>
+    console.log('second sub', event.type, event.x, event.y)
+  );
+}, 5000);
